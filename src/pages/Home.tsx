@@ -11,6 +11,18 @@ export default function Home() {
 
     useEffect(() => {
         const fetchAllIssues = async () => {
+            const cachedData = localStorage.getItem('me-contrata/issues');
+            if (cachedData != null) {
+                const {issues, timestamp} = JSON.parse(localStorage.getItem('me-contrata/issues') as string);
+
+                const oneHour = 60 * 60 * 1000;
+                if (Date.now() - timestamp < oneHour) {
+                    return issues;
+                } else {
+                    localStorage.removeItem('me-contrata/issues');
+                }
+            }
+
             const issues = [];
             let page = 1;
             const perPage = 100;
@@ -41,7 +53,18 @@ export default function Home() {
             }
         };
 
-        fetchAllIssues().then((issues) => setIssues(issues)).finally(() => setLoading(false));
+        fetchAllIssues()
+            .then((issues) => {
+                setIssues(issues)
+
+                const toStorage =  {
+                    issues: issues,
+                    timestamp: Date.now()
+                };
+
+                localStorage.setItem('me-contrata/issues', JSON.stringify(toStorage));
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     return (
