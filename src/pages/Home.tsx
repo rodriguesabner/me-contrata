@@ -7,6 +7,7 @@ import {Issue} from "../interfaces/issues.interface";
 export default function Home() {
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchAllIssues = async () => {
@@ -40,18 +41,25 @@ export default function Home() {
             }
         };
 
-        fetchAllIssues().then((issues) => setIssues(issues));
+        fetchAllIssues().then((issues) => setIssues(issues)).finally(() => setLoading(false));
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-            <HeroSection/>
-            <IssuesSection
-                issues={issues}
-                page={currentPage}
-                setPage={setCurrentPage}
-            />
-        </div>
+        loading ? (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        ) : (
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+                <HeroSection/>
+
+                <IssuesSection
+                    issues={issues}
+                    page={currentPage}
+                    setPage={setCurrentPage}
+                />
+            </div>
+        )
     )
 }
 
