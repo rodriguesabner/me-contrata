@@ -15,7 +15,7 @@ const HeroSection = () => {
                             Conectando talentos front-end com as melhores oportunidades do mercado brasileiro.
                         </p>
                     </div>
-                    <div className="space-x-4">
+                    <div className="flex flex-row items-center space-x-4">
                         <a
                             href="https://github.com/frontendbr/me-contrata/issues/new"
                             className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
